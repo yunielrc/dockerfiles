@@ -1,4 +1,4 @@
-# Project Title
+# shadowsocks-rust-server
 
 ## About
 
