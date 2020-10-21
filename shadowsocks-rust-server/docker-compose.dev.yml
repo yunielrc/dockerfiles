@@ -1,0 +1,29 @@
+version: "3.4"
+
+x-base: &base
+  build:
+    context: .
+    dockerfile: ./Dockerfile
+    target: release
+  volumes:
+    - "./root/etc/shadowsocks-rust-server:/etc/shadowsocks-rust-server:ro"
+    - "./root/usr/bin/ssserver-wrap:/usr/bin/ssserver-wrap:ro"
+  ports:
+    - "4443:8388"
+
+services:
+  server:
+    <<: *base
+    environment:
+      - SS_PASSWORD=pass
+
+  server-conf:
+    <<: *base
+    volumes:
+      - "./config.json:/etc/shadowsocks-rust-server/config.json:ro"
+
+  interactive:
+    <<: *base
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
+    entrypoint: ["/bin/sh"]

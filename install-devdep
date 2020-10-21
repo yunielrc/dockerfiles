@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+# Install brew
+wget -qO - https://git.io/JTlbH?=brew-ubuntu | bash
+
+brew install pre-commit
+brew install shfmt
+brew install shellcheck

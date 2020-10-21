@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# Generates a default configuration if the user doesn't define it, or
+# uses user defined config, and launchs ssserver
+
+set -eu
+
+readonly USER_CONFIG_FILE='/etc/shadowsocks-rust-server/config.json'
+readonly GEN_CONFIG_FILE='/tmp/config.generated.json'
+
+# if the configuration file doesn't exist it is created
+# in this case the password environment var is mandatory
+if [ -f "$USER_CONFIG_FILE" ]; then
+  ssserver -c "$USER_CONFIG_FILE"
+else
+  : "$SS_PASSWORD"
+  cat <<-EOF >"$GEN_CONFIG_FILE"
+{
+  "server": "0.0.0.0",
+  "server_port": 8388,
+  "password": "$SS_PASSWORD",
+  "timeout": 300,
+  "method": "aes-256-gcm"
+}
+EOF
+  ssserver -c "$GEN_CONFIG_FILE"
+fi

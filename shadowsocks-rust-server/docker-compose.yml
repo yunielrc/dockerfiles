@@ -1,0 +1,11 @@
+version: "3.4"
+
+services:
+  shadowsocks-rust-server:
+    image: yunielrc/shadowsocks-rust-server
+    environment:
+      - SS_PASSWORD=your_password
+    volumes:
+      - "./config.js:/etc/shadowsocks-rust-server/config.js:ro"
+    ports:
+      - "443:8388"

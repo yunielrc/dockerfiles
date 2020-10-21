@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+# Install docker & docker-compose
+wget -qO - https://git.io/JJaKZ?=docker-ubuntu | bash

@@ -1,0 +1,19 @@
+repos:
+  - repo: git://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-executables-have-shebangs
+  - repo: git://github.com/jumanjihouse/pre-commit-hooks
+    rev: 2.1.4
+    hooks:
+      - id: shfmt
+      - id: shellcheck
+  - repo: git://github.com/IamTheFij/docker-pre-commit
+    rev: v2.0.0
+    hooks:
+      - id: docker-compose-check
+      - id: hadolint-system
