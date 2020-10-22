@@ -5,25 +5,34 @@ x-base: &base
     context: .
     dockerfile: ./Dockerfile
     target: release
+  container_name: shadowsocks-rust-server
   volumes:
-    - "./root/etc/shadowsocks-rust-server:/etc/shadowsocks-rust-server:ro"
-    - "./root/usr/bin/ssserver-wrap:/usr/bin/ssserver-wrap:ro"
+    - "./root/usr/bin/run-ssserver:/usr/bin/run-ssserver:ro"
   ports:
     - "4443:8388"
+  command: /usr/bin/run-ssserver
 
 services:
   server:
     <<: *base
     environment:
-      - SS_PASSWORD=pass
+      - "SS_ADDR=0.0.0.0"
+      - SS_PORT=8388
+      - "SS_PASSWORD=your_password"
+      - TIMEOUT=300
+      - "SS_ENCRYPT_METHOD=aes-256-gcm"
+      - "SS_NAMESERVER=1.1.1.1"
+      - "SS_PLUGIN=v2ray-plugin"
+      - "SS_PLUGIN_OPTS=server"
 
   server-conf:
     <<: *base
     volumes:
-      - "./config.json:/etc/shadowsocks-rust-server/config.json:ro"
+      - "./root/usr/bin/run-ssserver:/usr/bin/run-ssserver:ro"
+      - "./data-dev/config.json:/etc/ssserver/config.json:ro"
 
   interactive:
     <<: *base
     stdin_open: true # docker run -i
     tty: true # docker run -t
-    entrypoint: ["/bin/sh"]
+    command: ["/bin/sh"]

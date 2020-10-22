@@ -1,0 +1,49 @@
+#!/bin/sh
+
+# Generates a default configuration if the user doesn't define one, using
+# password defined in environment variable.
+# launchs ssserver
+
+set -eu
+
+readonly USER_CONFIG_FILE='/etc/ssserver/config.json'
+readonly GEN_CONFIG_FILE='/tmp/config.generated.json'
+
+# if the configuration file doesn't exist it is created
+# in this case the password environment var is mandatory
+if [ -f "$USER_CONFIG_FILE" ]; then
+  echo 'Config:'
+  echo "cat ${USER_CONFIG_FILE}"
+  cat "$USER_CONFIG_FILE"
+
+  ssserver -c "$USER_CONFIG_FILE"
+else
+  {
+    {
+      cat <<-EOF
+{
+  "server": "$SS_ADDR",
+  "server_port": $SS_PORT,
+  "password": "$SS_PASSWORD",
+  "timeout": $SS_TIMEOUT,
+  "method": "$SS_ENCRYPT_METHOD",
+EOF
+
+      [ -n "${SS_NAMESERVER:-}" ] &&
+        echo "  \"nameserver\": \"${SS_NAMESERVER}\","
+
+      [ -n "${SS_PLUGIN:-}" ] &&
+        echo "  \"plugin\": \"${SS_PLUGIN}\","
+
+      [ -n "${SS_PLUGIN_OPTS:-}" ] &&
+        echo "  \"plugin_opts\": \"${SS_PLUGIN_OPTS}\","
+    } | sed '$ s/.$//'
+    echo '}'
+  } >"$GEN_CONFIG_FILE"
+
+  echo 'Generated config from environment:'
+  echo "cat ${GEN_CONFIG_FILE}"
+  cat "$GEN_CONFIG_FILE"
+
+  ssserver -c "$GEN_CONFIG_FILE"
+fi
