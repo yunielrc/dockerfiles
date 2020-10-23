@@ -4,7 +4,7 @@ services:
   client:
     image: yunielrc/shadowsocks-rust-client
     restart: always
-    container_name: shadowsocks-rust-client
+    container_name: ssclient
     # you can choice between environment variables (best option) configuration OR config.js file
     environment:
       - "SS_SERVER_IP=${SS_SERVER_IP}"

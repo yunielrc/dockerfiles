@@ -4,7 +4,7 @@ services:
   server:
     image: yunielrc/shadowsocks-rust-server
     restart: always
-    container_name: shadowsocks-rust-server
+    container_name: ssserver
     # you can choice between environment variables (best option) configuration OR config.js file
     environment:
       - "SS_PASSWORD=${SS_PASSWORD}"
