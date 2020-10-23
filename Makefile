@@ -1,5 +1,11 @@
+SHELL := /bin/bash
+
 ifndef REPO
 	REPO :=
+endif
+
+ifndef SERVICE
+	SERVICE :=
 endif
 
 ifneq "$(TAG)" ""
@@ -12,9 +18,27 @@ endif
 build:
 	docker build -t $(REPO_TAG) .
 
+.PHONY: buildall
+buildall:
+	./buildall
+
 .PHONY: push
 push:
 	docker push $(REPO_TAG)
+
+.PHONY: pushall
+pushall:
+	./pushall
+
+.PHONY: run
+run:
+	docker-compose run --rm --service-ports $(SERVICE)
+
+.PHONY: rund
+rund:
+	docker-compose run --rm --service-ports -d $(SERVICE)
+
+
 
 # dev commands
 # DEVCOMMAND=docker-compose -f docker-compose.dev.yml

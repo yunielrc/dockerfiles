@@ -23,21 +23,20 @@ FROM alpine:latest AS release
 RUN apk add --no-cache \
   ca-certificates \
   gettext \
-  && mkdir /etc/ssserver
+  && mkdir /etc/sslocal
 
-COPY --from=builder /releases/ssserver /usr/bin/ssserver
+COPY --from=builder /releases/sslocal /usr/bin/sslocal
 COPY --from=builder /releases/v2ray-plugin_linux_amd64 /usr/bin/v2ray-plugin
 
 COPY root /
 
+# ENV SS_SERVER_IP="<server_ip>"
+# ENV SS_SERVER_PORT=<server_port>
 # ENV SS_PASSWORD="<password>"
-ENV SS_ENCRYPT_METHOD="aes-256-gcm"
 ENV SS_TIMEOUT=300
-# ENV SS_NAMESERVER="1.1.1.1"
+ENV SS_ENCRYPT_METHOD="aes-256-gcm"
 # ENV SS_PLUGIN="v2ray-plugin"
-# ENV SS_PLUGIN_OPTS="server"
 
-EXPOSE 8388/tcp
-EXPOSE 8388/udp
+EXPOSE 1080
 
-CMD [ "run-ssserver" ]
+CMD [ "run-sslocal" ]

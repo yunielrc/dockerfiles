@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+while IFS= read -r -d '' file; do
+  (
+    cd "$(realpath "${file%/*}")"
+
+    echo -e "\n\n>>>>> Building: ${file#*/}\n\n"
+    make build || :
+  )
+done < <(find . -type f -name Dockerfile -print0)
