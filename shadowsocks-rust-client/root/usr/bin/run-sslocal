@@ -6,18 +6,11 @@
 
 set -eu
 
-readonly USER_CONFIG_FILE='/etc/sslocal/config.json'
+CONFIG_FILE='/etc/sslocal/config.json'
 readonly GEN_CONFIG_FILE='/tmp/config.generated.json'
-
 # if the configuration file doesn't exist it is created
 # in this case the password environment var is mandatory
-if [ -f "$USER_CONFIG_FILE" ]; then
-  echo 'Config:'
-  echo "cat ${USER_CONFIG_FILE}"
-  cat "$USER_CONFIG_FILE"
-
-  sslocal -c "$USER_CONFIG_FILE"
-else
+if [ ! -f "$CONFIG_FILE" ]; then
   {
     {
       cat <<-EOF
@@ -33,13 +26,22 @@ EOF
       [ -n "${SS_PLUGIN:-}" ] &&
         echo "  \"plugin\": \"${SS_PLUGIN}\","
 
+      [ -n "${SS_PLUGIN_OPTS:-}" ] &&
+        echo "  \"plugin_opts\": \"${SS_PLUGIN_OPTS}\","
+
     } | sed '$ s/,$//'
     echo '}'
   } >"$GEN_CONFIG_FILE"
 
-  echo 'Generated config from environment:'
-  echo "cat ${GEN_CONFIG_FILE}"
-  cat "$GEN_CONFIG_FILE"
+  CONFIG_FILE="$GEN_CONFIG_FILE"
+fi
 
-  sslocal -c "$GEN_CONFIG_FILE"
+echo 'Config:'
+echo "cat ${CONFIG_FILE}"
+cat "$CONFIG_FILE"
+
+if [ -n "${SS_PROTOCOL:-}" ]; then
+  sslocal -c "$CONFIG_FILE" --protocol "$SS_PROTOCOL"
+else
+  sslocal -c "$CONFIG_FILE"
 fi
