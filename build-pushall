@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
+set -o allexport
+. .env
+set +o allexport
+
+while IFS= read -r -d '' file; do
+  (
+    cd "$(realpath "${file%/*}")"
+
+    echo -e "\n\n>>>>> Building: ${file#*/}\n"
+    make build || {
+      echo -e "\n\n>>>>> ERROR. Building: ${file#*/}\n"
+      exit 1
+    }
+    echo -e "\n\n>>>>> OK. Building: ${file#*/}\n"
+
+    echo -e "\n\n>>>>> Pushing: ${file#*/}\n"
+    make push || {
+      echo -e "\n\n>>>>> ERROR. Pushing: ${file#*/}\n"
+      exit 1
+    }
+    echo -e "\n\n>>>>> OK. Pushing: ${file#*/}\n"
+
+    if [[ "${BUILD_PUSHALL_RMI:-}" = true ]]; then
+      echo -e "\n\n>>>>> Deleting image: ${file#*/}\n"
+      make rmi || {
+        echo -e "\n\n>>>>> ERROR. Deleting image: ${file#*/}\n"
+        exit 1
+      }
+      echo -e "\n\n>>>>> OK. Deleting image: ${file#*/}\n"
+    fi
+  )
+done < <(find . -type f -name Dockerfile -print0)

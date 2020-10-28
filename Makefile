@@ -30,6 +30,14 @@ push:
 pushall:
 	./pushall
 
+.PHONY: build-pushall
+build-pushall:
+	./build-pushall
+
+.PHONY: rmi
+rmi:
+	docker rmi $(REPO_TAG)
+
 .PHONY: run
 run:
 	docker-compose run --rm --service-ports $(SERVICE)
