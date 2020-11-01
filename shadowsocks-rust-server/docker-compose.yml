@@ -1,7 +1,7 @@
 version: "3.4"
 
 services:
-  server:
+  ssserver:
     image: yunielrc/shadowsocks-rust-server
     restart: always
     container_name: ssserver

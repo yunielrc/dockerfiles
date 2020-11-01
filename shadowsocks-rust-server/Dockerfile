@@ -30,9 +30,12 @@ COPY --from=builder /releases/v2ray-plugin_linux_amd64 /usr/bin/v2ray-plugin
 
 COPY root /
 
-# ENV SS_PASSWORD="<password>"
-ENV SS_ENCRYPT_METHOD="aes-256-gcm"
+# REQUIRED
+# ENV SS_PASSWORD="<ss_server_password>"
+# DEFAULT
 ENV SS_TIMEOUT=300
+ENV SS_ENCRYPT_METHOD="aes-256-gcm"
+# OPTIONAL
 # ENV SS_NAMESERVER="1.1.1.1"
 # ENV SS_PLUGIN="v2ray-plugin"
 # ENV SS_PLUGIN_OPTS="server"

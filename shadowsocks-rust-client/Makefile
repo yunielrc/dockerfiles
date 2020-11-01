@@ -1,4 +1,4 @@
 REPO := yunielrc/shadowsocks-rust-client
-SERVICE := client
+SERVICE := ssclient
 
 include ../Makefile

@@ -2,87 +2,77 @@
 
 [A Rust port of shadowsocks](https://github.com/shadowsocks/shadowsocks-rust)
 
-## How to use this image
+## Environment variables
 
 ```sh
-docker run --name shadowsocks-rust-server \
-  -p 443:8388 \
-  -e SS_PASSWORD=mypassword \
+# REQUIRED
+SS_PASSWORD="<ss_server_password>"
+# DEFAULT
+SS_TIMEOUT=300
+SS_ENCRYPT_METHOD="aes-256-gcm"
+# OPTIONAL
+SS_NAMESERVER="1.1.1.1"
+SS_PLUGIN="v2ray-plugin"
+SS_PLUGIN_OPTS="server"
+```
+
+## How to use this image
+
+- with docker cli:
+
+```sh
+docker run --name ssserver \
+  -p 8388:8388/tcp \
+  -p 8388:8388/udp \
+  -e SS_PASSWORD=<ss_server_password> \
   -d yunielrc/shadowsocks-rust-server
 ```
 
-with docker-compose:
+- with docker-compose:
+
+ssserver
+
+```yml
+version: "3.4"
+
+services:
+  ssserver:
+    image: yunielrc/shadowsocks-rust-server
+    restart: always
+    container_name: ssserver
+    environment:
+      - "SS_PASSWORD=<ss_server_password>"
+    ports:
+      - "<ss_server_port>:8388/tcp"
+      - "<ss_server_port>:8388/udp"
+```
+
+ssclient
+
+```yml
+version: "3.4"
+
+services:
+  ssclient:
+    image: yunielrc/shadowsocks-rust-client
+    restart: always
+    container_name: ssclient
+    environment:
+      - "SS_SERVER_IP=<ss_server_ip>"
+      - "SS_SERVER_PORT=<ss_server_port>"
+      - "SS_PASSWORD=<ss_server_password>"
+    ports:
+      - "1080:1080"
+```
 
 ```sh
-cd shadowsocks-rust-server
-nano data/config.json
 docker-compose up -d
 ```
 
-## Build
+## Build Image
 
 ```sh
-cd shadowsocks-rust-server
+git clone https://github.com/yunielrc/dockerfiles.git
+cd dockerfiles/shadowsocks-rust-server
 docker build -t your_docker_id/shadowsocks-rust-server .
-```
-
-## Environment variables
-
-Below the variables with example values
-
-- Server address
-
-```sh
-SS_ADDR="0.0.0.0"
-```
-
-- Server port
-
-```sh
-SS_PORT=8388
-```
-
-- Server password
-
-```sh
-SS_PASSWORD="your_password"
-
-```
-
-- Server's timeout seconds for TCP relay
-
-```sh
-SS_TIMEOUT=300
-```
-
-- Server's encryption method
-
-Possible values: table, plain, none, aes-128-cfb, aes-128-cfb1, aes-128-cfb8, aes-128-cfb128, aes-192-
-cfb, aes-192-cfb1, aes-192-cfb8, aes-192-cfb128, aes-256-cfb, aes-256-cfb1, aes-256-cfb8, aes-256-cfb128, aes-128-ctr, aes-
-192-ctr, aes-256-ctr, rc4, rc4-md5, chacha20, salsa20, xsalsa20, chacha20-ietf, aes-128-gcm, aes-256-gcm, chacha20-ietf-
-poly1305, xchacha20-ietf-poly1305, aes-128-pmac-siv, aes-256-pmac-siv
-
-```sh
-SS_ENCRYPT_METHOD="aes-256-gcm"
-
-```
-
-- Nameserver
-
-```sh
-SS_NAMESERVER="1.1.1.1"
-
-```
-
-- [SIP003](https://shadowsocks.org/en/spec/Plugin.html) plugin
-
-```sh
-SS_PLUGIN="v2ray-plugin"
-
-```
-
-- Set SIP003 plugin options
-
-```sh
-SS_PLUGIN_OPTS="server"
 ```

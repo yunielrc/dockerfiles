@@ -30,11 +30,14 @@ COPY --from=builder /releases/v2ray-plugin_linux_amd64 /usr/bin/v2ray-plugin
 
 COPY root /
 
-# ENV SS_SERVER_IP="<server_ip>"
-# ENV SS_SERVER_PORT=<server_port>
-# ENV SS_PASSWORD="<password>"
+# REQUIRED
+# ENV SS_SERVER_IP="<ss_server_ip>"
+# ENV SS_SERVER_PORT=<ss_server_port>
+# ENV SS_PASSWORD="<ss_server_password>"
+# DEFAULT
 ENV SS_TIMEOUT=300
 ENV SS_ENCRYPT_METHOD="aes-256-gcm"
+# OPTIONAL
 # ENV SS_PLUGIN="v2ray-plugin"
 # ENV SS_PLUGIN_OPTS=""
 # ENV SS_PROTOCOL="redir"

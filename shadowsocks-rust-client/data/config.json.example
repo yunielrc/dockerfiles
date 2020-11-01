@@ -1,0 +1,9 @@
+{
+  "server": "<ss_server_ip>",
+  "server_port": "<ss_server_port_without_quotes>",
+  "local_address": "0.0.0.0",
+  "local_port": 1080,
+  "password": "<ss_server_password>",
+  "timeout": 300,
+  "method": "aes-256-gcm"
+}
