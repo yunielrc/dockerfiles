@@ -1,6 +1,6 @@
 # shadowsocks-rust-server
 
-[A Rust port of shadowsocks](https://github.com/shadowsocks/shadowsocks-rust)
+A lightweight [shadowsocks-rust](https://github.com/shadowsocks/shadowsocks-rust) with just the server binary and [v2ray-plugin](https://github.com/shadowsocks/v2ray-plugin)
 
 ## Environment variables
 
