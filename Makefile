@@ -16,7 +16,7 @@ endif
 
 .PHONY: build
 build:
-	docker build -t $(REPO_TAG) .
+	docker build --no-cache -t $(REPO_TAG) .
 
 .PHONY: buildall
 buildall:
