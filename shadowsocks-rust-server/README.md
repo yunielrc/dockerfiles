@@ -2,6 +2,8 @@
 
 A lightweight [shadowsocks-rust](https://github.com/shadowsocks/shadowsocks-rust) with just the server binary and [v2ray-plugin](https://github.com/shadowsocks/v2ray-plugin)
 
+[shadowsocks-rust-client on docker hub](https://hub.docker.com/r/yunielrc/shadowsocks-rust-client)
+
 ## Environment variables
 
 ```sh
@@ -18,7 +20,7 @@ SS_PLUGIN_OPTS="server"
 
 ## How to use this image
 
-- with docker cli:
+### With docker cli
 
 ```sh
 docker run --name ssserver \
@@ -28,7 +30,19 @@ docker run --name ssserver \
   -d yunielrc/shadowsocks-rust-server
 ```
 
-- with docker-compose:
+**Using v2ray-plugin:**
+
+```sh
+docker run --name ssserver \
+  -p 8388:8388/tcp \
+  -p 8388:8388/udp \
+  -e SS_PASSWORD=<ss_server_password> \
+  -e SS_PLUGIN=v2ray-plugin \
+  -e SS_PLUGIN_OPTS=server \
+  -d yunielrc/shadowsocks-rust-server
+```
+
+### With docker-compose
 
 ssserver
 
@@ -61,6 +75,46 @@ services:
       - "SS_SERVER_IP=<ss_server_ip>"
       - "SS_SERVER_PORT=<ss_server_port>"
       - "SS_PASSWORD=<ss_server_password>"
+    ports:
+      - "1080:1080"
+```
+
+**Using v2ray-plugin:**
+
+ssserver
+
+```yml
+version: "3.4"
+
+services:
+  ssserver:
+    image: yunielrc/shadowsocks-rust-server
+    restart: always
+    container_name: ssserver
+    environment:
+      - "SS_PASSWORD=<ss_server_password>"
+      - "SS_PLUGIN=v2ray-plugin"
+      - "SS_PLUGIN_OPTS=server"
+    ports:
+      - "<ss_server_port>:8388/tcp"
+      - "<ss_server_port>:8388/udp"
+```
+
+ssclient
+
+```yml
+version: "3.4"
+
+services:
+  ssclient:
+    image: yunielrc/shadowsocks-rust-client
+    restart: always
+    container_name: ssclient
+    environment:
+      - "SS_SERVER_IP=<ss_server_ip>"
+      - "SS_SERVER_PORT=<ss_server_port>"
+      - "SS_PASSWORD=<ss_server_password>"
+      - "SS_PLUGIN=v2ray-plugin"
     ports:
       - "1080:1080"
 ```
