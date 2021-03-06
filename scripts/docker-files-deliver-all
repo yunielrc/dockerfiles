@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+
+set -eu
+
+#
+# Environment Variables (PARAMETERS)
+#   DF_USER
+#   DF_DIR
+#
+
+[ -f /etc/docker-files-deliver-all.env ] &&
+  . /etc/docker-files-deliver-all.env
+
+[ -z "${DF_USER:-}" ] &&
+  DF_USER="$USER"
+[ -z "${DF_DIR:-}" ] &&
+  DF_DIR="/home/${DF_USER}/dockerfiles"
+
+# shellcheck disable=SC2154
+cd "$DF_DIR"
+sudo -u "$DF_USER" git pull -v -all
+sudo -u "$DF_USER" sh deliver-all
