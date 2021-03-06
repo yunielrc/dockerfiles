@@ -20,10 +20,7 @@ RUN wget -qO - 'https://api.github.com/repos/shadowsocks/v2ray-plugin/releases/l
 # final stage
 FROM alpine:latest AS release
 
-RUN apk add --no-cache \
-  ca-certificates \
-  gettext \
-  && mkdir /etc/sslocal
+RUN mkdir /etc/sslocal
 
 COPY --from=builder /releases/sslocal /usr/bin/sslocal
 COPY --from=builder /releases/v2ray-plugin_linux_amd64 /usr/bin/v2ray-plugin

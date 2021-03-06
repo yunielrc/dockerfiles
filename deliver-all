@@ -3,6 +3,7 @@
 # Update docker image on docker hub including new app version
 #
 
+# only one script instance running
 if [ "${NOLOCK:-}" != true ] && [ "${FLOCKER:-}" != "$0" ]; then
   exec env FLOCKER="$0" flock -E 3 -en "$0" sh "$0" "$@" || :
 fi
