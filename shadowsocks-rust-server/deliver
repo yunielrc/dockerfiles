@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+#
+# Update docker image on docker hub including new app version
+#
+
+set -eu
+
+# shellcheck disable=SC1007
+cd "$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)"
+
+# Variables
+OS=alpine \
+  REPO=yunielrc/shadowsocks-rust-server \
+  APP_VERSION="$(wget -qO - 'https://api.github.com/repos/shadowsocks/shadowsocks-rust/releases/latest' | grep -Pm 1 '"tag_name":\s*"v\d+\.\d+\.\d+"' | grep -Po '\d+\.\d+\.\d+')" \
+  sh ../scripts/push-upgrade-app

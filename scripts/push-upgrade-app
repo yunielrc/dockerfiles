@@ -1,0 +1,44 @@
+#!/usr/bin/env sh
+#
+# Update docker image on docker hub including new app version
+#
+
+set -eu
+
+#
+# Environment Variables (PARAMETERS):
+#   OS
+#   REPO
+#   APP_VERSION
+#   FORCE=false         (OPTIONAL)
+#
+
+# Variables
+readonly IMAGE_VERSION="$(docker images "$REPO" --format '{{.Tag}}' | grep -Pm 1 '^\d+\.\d+\.\d+$')"
+readonly REPO_TAGS="${REPO} ${REPO}:${APP_VERSION} ${REPO}:${OS}-${APP_VERSION} ${REPO}:${OS}"
+
+# Check app version
+if [ "$IMAGE_VERSION" = "$APP_VERSION" ] && [ "${FORCE:-false}" = false ]; then
+  echo "> Docker image is currently updated, image version: ${IMAGE_VERSION} = app version: ${APP_VERSION}
+"
+  exit 0
+fi
+
+echo "> Pushing image update, image version: ${IMAGE_VERSION}, app version: ${APP_VERSION}
+"
+
+echo '>> Building image with new software version
+'
+repo_tags_params=''
+for r in $REPO_TAGS; do
+  repo_tags_params="${repo_tags_params} -t ${r}"
+done
+eval docker build --no-cache "$repo_tags_params" .
+
+echo '>> Pushing image with new software version
+'
+for r in $REPO_TAGS; do
+  docker push "$r"
+done
+
+echo '> SUCCESS'
