@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
-
+#
+# Continuos delivery of docker images to docker hub
+# copy this script to /etc/cron.daily and give it execution permission
+#
 set -eu
 
 #

@@ -13,6 +13,10 @@ set -eu
 # shellcheck disable=SC1007
 cd "$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)"
 
+set -a
+. .env
+set +a
+
 find . -type f -name Dockerfile |
   while read -r file; do
     (

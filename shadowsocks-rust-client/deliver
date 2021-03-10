@@ -10,6 +10,6 @@ cd "$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)"
 
 # Variables
 OS=alpine \
-  REPO=yunielrc/shadowsocks-rust-client \
+  REPO="${REPO_OWNER}/shadowsocks-rust-client" \
   APP_VERSION="$(wget -qO - 'https://api.github.com/repos/shadowsocks/shadowsocks-rust/releases/latest' | grep -Pm 1 '"tag_name":\s*"v\d+\.\d+\.\d+"' | grep -Po '\d+\.\d+\.\d+')" \
   sh ../scripts/push-upgrade-app
