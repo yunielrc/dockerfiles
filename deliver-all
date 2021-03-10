@@ -15,7 +15,7 @@ cd "$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)"
 echo "in: ${PWD}"
 
 set -a
-. .env
+. ./.env
 set +a
 
 find . -type f -name Dockerfile |
