@@ -21,5 +21,5 @@ set -eu
 
 # shellcheck disable=SC2154
 cd "$DF_DIR"
-sudo -u "$DF_USER" git pull -v --all
+sudo -u "$DF_USER" git reset --hard && git pull -v --all
 sudo -u "$DF_USER" sh deliver-all
