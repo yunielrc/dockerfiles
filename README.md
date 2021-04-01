@@ -8,7 +8,7 @@ Execute the commands below on your CD server:
 
 ```sh
 cd ~
-docker login  # set your creadentials and test a docker push to docker hub
+docker login  # set your credentials and test a docker push to docker hub
 git clone https://github.com/yunielrc/dockerfiles.git
 echo 'REPO_OWNER=<your_docker_user>' >~/dockerfiles/.env
 cat <<-EOF | sudo tee /etc/docker-files-deliver-all.env
